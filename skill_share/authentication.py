@@ -31,7 +31,7 @@ class FirebaseAuthentication(BaseAuthentication):
             uid = decoded_token['uid']
 
             user = self.user_service.get_user_from_firebase_uid(uid=uid)
-            return (user,uid)
+            return (user,decoded_token)
             # if user is not None:  
             #     return user
             # else:  # redundant??
