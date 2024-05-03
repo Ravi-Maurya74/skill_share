@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username"""
 
-    firebase_uid = models.CharField(max_length=128, unique=True)
+    firebase_uid = models.CharField(max_length=128, unique=True,primary_key=True)
     name = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     # profile_pic = models.ImageField(
