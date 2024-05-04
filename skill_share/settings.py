@@ -17,11 +17,12 @@ from firebase_admin import credentials
 from firebase_admin import auth
 
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-cred_path = BASE_DIR / "secrets/skill-share-67a40-firebase-adminsdk-q4izq-28378c6dfb.json"
+cred_path = (
+    BASE_DIR / "secrets/skill-share-67a40-firebase-adminsdk-q4izq-28378c6dfb.json"
+)
 
 cred = credentials.Certificate(cert=cred_path)
 firebase_admin.initialize_app(credential=cred)
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "user",
+    "chat",
 ]
 
 MIDDLEWARE = [
@@ -134,4 +136,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
