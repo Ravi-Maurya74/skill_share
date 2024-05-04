@@ -26,11 +26,8 @@ class UserCreateView(APIView):
             return Response(
                 {"message": "User already exists"}, status=status.HTTP_400_BAD_REQUEST
             )
-        data = request.data
-        data["firebase_uid"] = creds['uid']
-        data["profile_pic"] = creds['picture']
         try:
-            newUser = userService.create_new_user(data=data)
+            newUser = userService.create_new_user(data=creds)
             return Response(newUser, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(

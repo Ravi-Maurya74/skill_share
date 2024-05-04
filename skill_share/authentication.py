@@ -19,15 +19,15 @@ class FirebaseAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         id_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
-        print("id_token: ")
-        print(id_token)
+        # print("id_token: ")
+        # print(id_token)
 
         if not id_token:
             return None
 
         try:
             decoded_token = auth.verify_id_token(id_token=id_token)
-            print(decoded_token)
+            # print(decoded_token)
             uid = decoded_token['uid']
 
             user = self.user_service.get_user_from_firebase_uid(uid=uid)

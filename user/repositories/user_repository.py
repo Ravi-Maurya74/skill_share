@@ -9,6 +9,7 @@ class UserRepository:
         # serializer.validate()
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        print(serializer.data)
         return serializer.data
         # if serializer.validate:
         #     serializer.save()
