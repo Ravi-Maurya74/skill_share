@@ -9,13 +9,7 @@ class UserRepository:
         # serializer.validate()
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        print(serializer.data)
         return serializer.data
-        # if serializer.validate:
-        #     serializer.save()
-        #     return serializer.data
-        # else:
-        #     raise serializers.ValidationError("")
 
     def get_user_from_firebase_uid(self, uid: str):
         try:

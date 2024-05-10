@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 
 from user.repositories.user_repository import UserRepository
 from user.services.user_service import UserService
+from user.serializers import UserSerializer
 from skill_share.authentication import FirebaseAuthentication
 
 
@@ -12,16 +13,14 @@ from skill_share.authentication import FirebaseAuthentication
 userService = UserService(repository=UserRepository())
 
 
-class UserCreateView(APIView):
+class AuthenticateUser(APIView):
     authentication_classes = [FirebaseAuthentication]
 
     def post(self, request):
         creds = request.auth
         user = request.user
         if user is not None:
-            return Response(
-                {"message": "User already exists"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
         try:
             newUser = userService.create_new_user(data=creds)
             return Response(newUser, status=status.HTTP_201_CREATED)
