@@ -1,5 +1,4 @@
 from django.db import models
-from user.models import User
 
 # Create your models here.
 class Skill(models.Model):
@@ -9,17 +8,17 @@ class Skill(models.Model):
 class Community(models.Model):
     name = models.CharField(max_length=255,primary_key=True)
     skill = models.ForeignKey(Skill,on_delete=models.CASCADE)
-    members = models.ManyToManyField(User,through = 'Membership')
+    members = models.ManyToManyField("user.User",through = 'Membership')
 
 class Membership(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey("user.User",on_delete=models.CASCADE)
     community = models.ForeignKey(Community,on_delete=models.CASCADE)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
 
 
 class Badge(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey("user.User",on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill,on_delete=models.CASCADE)
     level = models.IntegerField()
     
@@ -30,19 +29,19 @@ class Session(models.Model):
     description = models.TextField(blank= True)
 
 class Feedback(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey("user.User",on_delete=models.CASCADE)
     session = models.ForeignKey(Session,on_delete=models.CASCADE)
     rating = models.IntegerField()
     comments = models.TextField()
 
 # not for specific skill
 class TimeBank(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey("user.User",on_delete=models.CASCADE)
     hours_spent = models.IntegerField()
     # can add skill if specific
 
 # why is community not many to many here
 class Project(models.Model):
     community = models.ForeignKey(Community,on_delete=models.CASCADE)
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField("user.User")
     description = models.TextField()
