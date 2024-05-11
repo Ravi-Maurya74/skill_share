@@ -36,3 +36,14 @@ class CommunityPostDetailView(APIView):
 
     def get(self, request, pk):
         return Response(communityPostService.get_community_post(pk=pk, request=request))
+
+
+class CommunityPostCommentView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def get(self, request, pk):
+        return Response(
+            communityPostService.get_community_post_comments(
+                post_pk=pk, request=request
+            )
+        )
