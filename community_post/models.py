@@ -25,7 +25,7 @@ class CommunityPost(models.Model):
         super().delete(*args, **kwargs)  # delete Post object
 
     def __str__(self):
-        return self.title
+        return self.content
 
     def upvotes(self) -> int:
         return self.votes.filter(vote=Vote.UPVOTE).count()
@@ -74,7 +74,8 @@ class SavedPost(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.post}"
-    
+
+
 class Comment(models.Model):
     content = models.TextField()
     user = models.ForeignKey(
