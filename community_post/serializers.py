@@ -18,11 +18,11 @@ class CommunityPostListSerializer(serializers.ModelSerializer):
 
     score = serializers.SerializerMethodField()
     vote = serializers.SerializerMethodField()
-    detail_url = serializers.HyperlinkedIdentityField(
-        view_name="community-post-detail",
-        lookup_field="pk",
-        lookup_url_kwarg="pk",
-    )
+    # detail_url = serializers.HyperlinkedIdentityField(
+    #     view_name="community-post-detail",
+    #     lookup_field="pk",
+    #     lookup_url_kwarg="pk",
+    # )
 
     class Meta:
         model = CommunityPost
@@ -35,7 +35,7 @@ class CommunityPostListSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         vote = Vote.objects.filter(post=obj, user=user).first()
         if vote:
-            return vote.vote
+            return vote.value
         return None
 
 
@@ -65,7 +65,7 @@ class CommunityPostDetailSerializer(serializers.ModelSerializer):
     def get_score(self, obj):
         return obj.score()
 
-    def get_is_bookmarked(self, obj):
+    def get_is_saved(self, obj):
         user = self.context["request"].user
         return SavedPost.objects.filter(post=obj, user=user).exists()
 
@@ -73,7 +73,7 @@ class CommunityPostDetailSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         vote = SavedPost.objects.filter(post=obj, user=user).first()
         if vote:
-            return vote.vote
+            return vote.value
         return None
 
 
@@ -102,5 +102,5 @@ class CommentListSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         vote = CommentVote.objects.filter(comment=obj, user=user).first()
         if vote:
-            return vote.vote
+            return vote.value
         return None

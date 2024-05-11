@@ -4,7 +4,7 @@ from django.db import models
 class CommunityPost(models.Model):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
     community = models.ForeignKey("community.Community", on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(blank=False,null=False)
     image = models.ImageField(upload_to="posts/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -28,14 +28,14 @@ class CommunityPost(models.Model):
         return self.content
 
     def upvotes(self) -> int:
-        return self.votes.filter(vote=Vote.UPVOTE).count()
+        return self.votes.filter(value=Vote.UPVOTE).count()
 
     def downvotes(self):
-        return self.votes.filter(vote=Vote.DOWNVOTE).count()
+        return self.votes.filter(value=Vote.DOWNVOTE).count()
 
     def score(self):
-        upvotes = self.votes.filter(vote=Vote.UPVOTE).count()
-        downvotes = self.votes.filter(vote=Vote.DOWNVOTE).count()
+        upvotes = self.votes.filter(value=Vote.UPVOTE).count()
+        downvotes = self.votes.filter(value=Vote.DOWNVOTE).count()
         return upvotes - downvotes
 
 
@@ -55,7 +55,7 @@ class Vote(models.Model):
     value = models.SmallIntegerField(choices=VOTE_CHOICES)
 
     def __str__(self):
-        return f"{self.user} {self.get_vote_display()}d {self.post}"
+        return f"{self.user}  {self.post}"
 
 
 class SavedPost(models.Model):
@@ -101,14 +101,14 @@ class Comment(models.Model):
         return f"{self.author} commented {self.content[:50]} on {self.post}"
 
     def upvotes(self):
-        return self.votes.filter(vote=CommentVote.UPVOTE).count()
+        return self.votes.filter(value=CommentVote.UPVOTE).count()
 
     def downvotes(self):
-        return self.votes.filter(vote=CommentVote.DOWNVOTE).count()
+        return self.votes.filter(value=CommentVote.DOWNVOTE).count()
 
     def score(self):
-        upvotes = self.votes.filter(vote=CommentVote.UPVOTE).count()
-        downvotes = self.votes.filter(vote=CommentVote.DOWNVOTE).count()
+        upvotes = self.votes.filter(value=CommentVote.UPVOTE).count()
+        downvotes = self.votes.filter(value=CommentVote.DOWNVOTE).count()
         return upvotes - downvotes
 
     def save(self, *args, **kwargs):
@@ -131,10 +131,10 @@ class CommentVote(models.Model):
     comment = models.ForeignKey(
         "community_post.Comment", on_delete=models.CASCADE, related_name="votes"
     )
-    vote = models.SmallIntegerField(choices=VOTE_CHOICES)
+    value = models.SmallIntegerField(choices=VOTE_CHOICES)
 
     class Meta:
         unique_together = ("user", "comment")
 
     def __str__(self):
-        return f"{self.user} - {self.comment} - {self.get_vote_display()}"
+        return f"{self.user} - {self.comment}"
