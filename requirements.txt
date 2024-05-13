@@ -8,3 +8,5 @@ django-storages==1.14.3
 boto3==1.34.102
 pillow==10.3.0
 python-dotenv==1.0.1
+dj-database-url==2.1.0
+psycopg2-binary==2.9.9

@@ -1,6 +1,7 @@
 from user.models import User
 from user.serializers import UserSerializer
 from rest_framework import serializers
+from django.db.models import Q
 
 
 class UserRepository:
@@ -17,3 +18,10 @@ class UserRepository:
             return user
         except User.DoesNotExist:
             return None
+
+    def search_user_by_name_and_email(self, search_query, user):
+        users = User.objects.filter(
+            Q(name__icontains=search_query) | Q(email__icontains=search_query)
+        ).exclude(pk=user)
+        serializer = UserSerializer(users, many=True)
+        return serializer.data

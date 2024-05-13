@@ -28,3 +28,21 @@ class AuthenticateUser(APIView):
             return Response(
                 {"message": str(e)}, status=status.HTTP_417_EXPECTATION_FAILED
             )
+
+
+class UserSearchView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def get(self, request):
+        search_query = request.query_params.get("query")
+        if search_query is None:
+            return Response(
+                {"message": "query parameter is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(
+            userService.search_user_by_name_and_email(
+                search_query, user=request.user.uid
+            ),
+            status=status.HTTP_200_OK,
+        )

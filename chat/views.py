@@ -12,7 +12,7 @@ from user.models import User
 chatService = ChatService(repository=ChatRepository())
 
 
-class ChatCreateView(APIView):
+class ChatListCreateView(APIView):
     authentication_classes = [FirebaseAuthentication]
 
     def post(self, request):
@@ -20,6 +20,13 @@ class ChatCreateView(APIView):
         user: User = request.user
         participants = data["participants"]
         participants.append(user.uid)
-        data["participants"]=participants
-        chat = chatService.create_new_chat(data=data)
-        return Response({"message": "success"}, status=status.HTTP_200_OK)
+        data["participants"] = participants
+        return Response(
+            chatService.get_or_create_chat(data=data), status=status.HTTP_200_OK
+        )
+
+    def get(self, request):
+        user: User = request.user
+        return Response(
+            chatService.get_all_dms_for_user(user=user), status=status.HTTP_200_OK
+        )
