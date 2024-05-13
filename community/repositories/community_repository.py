@@ -1,11 +1,7 @@
 from user.models import User 
-from community.models import Skill,Community,Badge,Session
+from community.models import Skill,Community,Badge,Session,Membership
 
 class CommunityRepository:
-    def create_new_skill(self,data):
-        return Skill.objects.create(**data)
-    
-
     def create_new_community(self,name,skill):
         return Community.objects.create(name = name,skill = skill)
     
@@ -14,6 +10,12 @@ class CommunityRepository:
         community = Community.objects.get(pk = name)
         community.members.add(*members)
         return community
+    
+    def make_admin(self,community,user):
+        membership = Membership.objects.get(user = user,community = community)
+        membership.is_admin = True
+        membership.save()
+        return membership
     
     def create_new_badge(self,data):
         return Badge.objects.create(**data)
@@ -30,6 +32,9 @@ class CommunityRepository:
       
     def create_new_session_for_community(self,data):
         return Session.objects.create(**data)
+    
+    def get_all_communities(self):
+        return Community.objects.all()
     
     # def plan_sessions(self,community,date,description):
     #     session = Session.objects.get(community = community)
