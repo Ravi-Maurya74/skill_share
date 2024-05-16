@@ -2,6 +2,7 @@ from django.db import models
 
 
 class CommunityPost(models.Model):
+    title = models.CharField(max_length=255, blank=False, null=False)
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
     community = models.ForeignKey("community.Community", on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False)

@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 # Create your models here.
@@ -34,6 +35,7 @@ class Badge(models.Model):
 
 # date can be scheduled so not auto_now
 class Session(models.Model):
+    channel_id = models.UUIDField(default=uuid.uuid4, editable=False)
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     date = models.DateTimeField(blank=True)
     description = models.TextField(blank=True)
