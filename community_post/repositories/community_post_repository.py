@@ -32,3 +32,10 @@ class CommunityPostRepository:
         comments = post.comments.all()
         serializer = CommentListSerializer(comments, many=True,context={"request": request})
         return serializer.data
+    
+    def get_community_posts_by_community(self, community_pk, request):
+        posts = CommunityPost.objects.filter(community=community_pk)
+        serializer = CommunityPostListSerializer(
+            posts, many=True, context={"request": request}
+        )
+        return serializer.data

@@ -15,6 +15,7 @@ class Community(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
     members = models.ManyToManyField("user.User", through="Membership")
+    # description = models.TextField(blank=True)
 
     def __str__(self) -> str:
         return f"{self.name} - {self.skill}"

@@ -22,3 +22,8 @@ class CommunityPostService:
         return self.repository.get_community_post_comments(
             post_pk=post_pk, request=request
         )
+    
+    def get_community_posts_by_community(self, community_pk, request):
+        return self.repository.get_community_posts_by_community(
+            community_pk=community_pk, request=request
+        )

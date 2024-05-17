@@ -47,3 +47,16 @@ class CommunityPostCommentView(APIView):
                 post_pk=pk, request=request
             )
         )
+    
+class CommunityPostByCommunityView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def get(self, request):
+        community_pk = request.query_params.get('community_pk')
+        if not community_pk:
+            return Response({"error": "Missing community_pk query parameter"}, status=400)
+        return Response(
+            communityPostService.get_community_posts_by_community(
+                community_pk=community_pk, request=request
+            )
+        )
