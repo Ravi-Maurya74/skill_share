@@ -52,3 +52,9 @@ class ChatRepository:
         return Chat.objects.filter(type="dm", participants=user).order_by(
             "-last_message_time"
         )
+
+    def update_last_message_time(self, document_id):
+        chat = Chat.objects.get(pk=document_id)
+        chat.save()
+        return chat
+        

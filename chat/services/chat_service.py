@@ -32,3 +32,6 @@ class ChatService:
         return ChatSerializer(
             self.repository.get_all_dms_for_user(user), many=True
         ).data
+    
+    def update_last_message_time(self, document_id):
+        return ChatSerializer(self.repository.update_last_message_time(document_id=document_id)).data

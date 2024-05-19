@@ -20,3 +20,15 @@ class CommunityService:
     def get_all_communities(self):
         return self.community_repository.get_all_communities()
     
+    def create_new_session_for_community(self, data):
+        return self.community_repository.create_new_session_for_community(data)
+    
+    def get_sessions(self, community):
+        return self.community_repository.get_sessions(community)
+    
+    def give_feedback(self, data):
+        return self.community_repository.give_feedback(data)
+    
+    def get_feedback(self, session):
+        return self.community_repository.get_feedback(session)
+    

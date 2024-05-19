@@ -30,3 +30,11 @@ class ChatListCreateView(APIView):
         return Response(
             chatService.get_all_dms_for_user(user=user), status=status.HTTP_200_OK
         )
+
+    def patch(self, request):
+        data = request.data
+        document_id = data["document_id"]
+        return Response(
+            chatService.update_last_message_time(document_id=document_id),
+            status=status.HTTP_200_OK,
+        )

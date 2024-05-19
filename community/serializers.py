@@ -47,3 +47,13 @@ class CommunityListSerializer(serializers.ModelSerializer):
         return Membership.objects.filter(
             user=self.context["request"].user, community=obj
         ).exists()
+    
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
+        fields = "__all__"
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = "__all__"

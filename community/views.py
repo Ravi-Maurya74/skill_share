@@ -9,6 +9,8 @@ from community.serializers import (
     SkillSerializer,
     CommunitySerializer,
     CommunityListSerializer,
+    SessionSerializer,
+    FeedbackSerializer,
 )
 
 from community.services.community_service import CommunityService
@@ -42,4 +44,43 @@ class CommunityListCreateView(APIView):
                 communities, many=True, context={"request": request}
             ).data,
             status=status.HTTP_200_OK,
+        )
+
+
+class SessionView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def post(self, request):
+        try:
+            data = request.data
+            session = community_service.create_new_session_for_community(data)
+            return Response(session, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        community = request.query_params.get("community")
+        sessions = community_service.get_sessions(community)
+        return Response(
+            sessions, status=status.HTTP_200_OK
+        )
+    
+class FeedbackView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def post(self, request):
+        try:
+            data = request.data
+            user = request.user
+            data["user"] = user.pk
+            feedback = community_service.give_feedback(data)
+            return Response(feedback, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        session = request.query_params.get("session")
+        feedback = community_service.get_feedback(session)
+        return Response(
+            feedback, status=status.HTTP_200_OK
         )

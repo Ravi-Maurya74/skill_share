@@ -15,7 +15,9 @@ class Community(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
     members = models.ManyToManyField("user.User", through="Membership")
-    # description = models.TextField(blank=True)
+    description = models.TextField(blank=True,null=True)
+    banner = models.ImageField(upload_to="community/banner/")
+    profile_image = models.ImageField(upload_to="community/profile_image/")
 
     def __str__(self) -> str:
         return f"{self.name} - {self.skill}"
@@ -38,8 +40,9 @@ class Badge(models.Model):
 class Session(models.Model):
     channel_id = models.UUIDField(default=uuid.uuid4, editable=False)
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
-    date = models.DateTimeField(blank=True)
+    time = models.DateTimeField(blank=True)
     description = models.TextField(blank=True)
+    duration = models.IntegerField()
 
 
 class Feedback(models.Model):
