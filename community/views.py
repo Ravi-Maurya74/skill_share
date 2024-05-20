@@ -29,9 +29,8 @@ class CommunityListCreateView(APIView):
 
     def post(self, request):
         data = request.data
-        skill = Skill.objects.get(pk=data["skill"])
         community = community_service.create_new_community(
-            community_name=data["community_name"], skill=skill, user=request.user
+            data=data,user=request.user
         )
         return Response(
             CommunitySerializer(community).data, status=status.HTTP_201_CREATED

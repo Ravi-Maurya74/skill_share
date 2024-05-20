@@ -5,8 +5,8 @@ class CommunityService:
     def __init__(self):
         self.community_repository = CommunityRepository()
 
-    def create_new_community(self, community_name, skill, user):
-        community = self.community_repository.create_new_community(community_name, skill)
+    def create_new_community(self, data, user):
+        community = self.community_repository.create_new_community(data)
         self.community_repository.add_members_to_community(community.name, [user])
         self.community_repository.make_admin(community, user)
         return community

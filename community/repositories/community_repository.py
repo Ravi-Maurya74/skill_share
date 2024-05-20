@@ -19,8 +19,10 @@ from community.serializers import (
 
 
 class CommunityRepository:
-    def create_new_community(self, name, skill):
-        return Community.objects.create(name=name, skill=skill)
+    def create_new_community(self,data):
+        serializer = CommunitySerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return serializer.save()
 
     # here is_admin data can also be passed
     def add_members_to_community(self, name, members):
