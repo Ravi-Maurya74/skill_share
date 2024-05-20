@@ -7,6 +7,7 @@ class CommunityPost(models.Model):
     community = models.ForeignKey("community.Community", on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False)
     image = models.ImageField(upload_to="posts/", null=True, blank=True)
+    # image = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
