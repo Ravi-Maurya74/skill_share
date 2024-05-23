@@ -23,4 +23,6 @@ urlpatterns = [
     path("chat/", include("chat.urls")),
     path("post/", include("community_post.urls")),
     path("community/", include("community.urls")),
+    path("recommend/", include("recommend_post.urls")),
+    # path("trends/", include("trends.urls")),
 ]

@@ -24,7 +24,7 @@ class Community(models.Model):
 
 
 class Membership(models.Model):
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE,related_name="memberships")
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
