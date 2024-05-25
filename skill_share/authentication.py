@@ -20,7 +20,7 @@ class FirebaseAuthentication(BaseAuthentication):
     def authenticate(self, request):
         id_token = request.META.get('HTTP_AUTHORIZATION').split()[1]
         # print("id_token: ")
-        # print(id_token)
+        print(id_token)
 
         if not id_token:
             return None
