@@ -60,3 +60,29 @@ class CommunityPostByCommunityView(APIView):
                 community_pk=community_pk, request=request
             )
         )
+    
+class SavePostView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def post(self, request):
+        data = request.data
+        user = request.user
+        post = data.get('post')
+        save = data.get('save')
+        return Response(
+            communityPostService.save_post(post=post, user=user, save=save),
+            status=status.HTTP_200_OK,
+        )
+    
+class VotePostView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def post(self, request):
+        data = request.data
+        user = request.user
+        post = data.get('post')
+        value = data.get('value')
+        return Response(
+            communityPostService.vote_post(post=post, user=user, value=value),
+            status=status.HTTP_200_OK,
+        )
