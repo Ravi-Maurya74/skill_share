@@ -1,4 +1,8 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from community_post.models import CommunityPost, Vote, Comment, SavedPost
@@ -7,6 +11,7 @@ from surprise import Dataset, Reader, SVD
 import pandas as pd
 from user.models import User
 from django.http import HttpRequest
+from skill_share.authentication import FirebaseAuthentication
 
 
 def generate_interaction_matrix():
@@ -54,9 +59,9 @@ def train_model(trainset):
 
 
 def recommend_posts(model, user_id, interaction_matrix, top_n=10):
-    user_ratings = interaction_matrix.loc[str(user_id)].values
+    user_ratings = interaction_matrix.loc[user_id]
     user_interactions = {
-        post_id: rating for post_id, rating in enumerate(user_ratings) if rating != 0
+        post_id: rating for post_id, rating in user_ratings.items() if rating != 0
     }
 
     all_post_ids = set(interaction_matrix.columns)
@@ -71,24 +76,21 @@ def recommend_posts(model, user_id, interaction_matrix, top_n=10):
 
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated])
+@authentication_classes([FirebaseAuthentication])
 def get_recommended_posts(request):
-    user = User.objects.all().first()
-    print(user.uid)
-    print(user.email)
     interaction_matrix = generate_interaction_matrix()
     trainset = prepare_data(interaction_matrix)
     model = train_model(trainset)
     try:
-        recommended_post_ids = recommend_posts(model, user.uid, interaction_matrix)
+        recommended_post_ids = recommend_posts(
+            model, request.user.uid, interaction_matrix
+        )
         recommended_posts = CommunityPost.objects.filter(id__in=recommended_post_ids)
-
-        fake_request = HttpRequest()
-        fake_request.user = "74g82gOrwYRAMd5tu56LQg8pQEs2"
 
         serializer = CommunityPostListSerializer(
             recommended_posts,
             many=True,
-            context={"request": fake_request},
+            context={"request": request},
         )
         return Response(serializer.data)
     except Exception as e:
