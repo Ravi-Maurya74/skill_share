@@ -8,11 +8,11 @@ urlpatterns = [
         views.CommunityPostDetailView.as_view(),
         name="community-detail-view",
     ),
-    path(
-        "<int:pk>/comments/",
-        views.CommunityPostCommentView.as_view(),
-        name="community-comment-view",
-    ),
+    # path(
+    #     "<int:pk>/comments/",
+    #     views.CommunityPostCommentView.as_view(),
+    #     name="community-comment-view",
+    # ),
     path(
         "community/",
         views.CommunityPostByCommunityView.as_view(),
@@ -27,5 +27,15 @@ urlpatterns = [
         "vote/",
         views.VotePostView.as_view(),
         name="vote-post-view",
+    ),
+    path(
+        "saved/",
+        views.SavedPostsView.as_view(),
+        name="saved-posts-view",
+    ),
+    path(
+        "comments/",
+        views.CommentView.as_view(),
+        name="comment-view",
     ),
 ]
