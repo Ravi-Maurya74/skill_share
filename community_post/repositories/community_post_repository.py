@@ -27,13 +27,13 @@ class CommunityPostRepository:
         serializer = CommunityPostDetailSerializer(post, context={"request": request})
         return serializer.data
 
-    def get_community_post_comments(self, post_pk, request):
-        post = CommunityPost.objects.get(pk=post_pk)
-        comments = post.comments.all()
-        serializer = CommentListSerializer(
-            comments, many=True, context={"request": request}
-        )
-        return serializer.data
+    # def get_community_post_comments(self, post_pk, request):
+    #     post = CommunityPost.objects.get(pk=post_pk)
+    #     comments = post.comments.all()
+    #     serializer = CommentListSerializer(
+    #         comments, many=True, context={"request": request}
+    #     )
+    #     return serializer.data
 
     def get_community_posts_by_community(self, community_pk, request):
         posts = CommunityPost.objects.filter(community=community_pk)
@@ -66,5 +66,13 @@ class CommunityPostRepository:
         posts = [saved_post.post for saved_post in saved_posts]
         serializer = CommunityPostListSerializer(
             posts, many=True, context={"request": request}
+        )
+        return serializer.data
+    
+    def get_comments(self, request,post,parent):
+        post = CommunityPost.objects.get(pk=post)
+        comments = post.comments.filter(parent=parent)
+        serializer = CommentListSerializer(
+            comments, many=True, context={"request": request}
         )
         return serializer.data

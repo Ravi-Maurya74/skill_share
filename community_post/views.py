@@ -38,15 +38,15 @@ class CommunityPostDetailView(APIView):
         return Response(communityPostService.get_community_post(pk=pk, request=request))
 
 
-class CommunityPostCommentView(APIView):
-    authentication_classes = [FirebaseAuthentication]
+# class CommunityPostCommentView(APIView):
+#     authentication_classes = [FirebaseAuthentication]
 
-    def get(self, request, pk):
-        return Response(
-            communityPostService.get_community_post_comments(
-                post_pk=pk, request=request
-            )
-        )
+#     def get(self, request, pk):
+#         return Response(
+#             communityPostService.get_community_post_comments(
+#                 post_pk=pk, request=request
+#             )
+#         )
     
 class CommunityPostByCommunityView(APIView):
     authentication_classes = [FirebaseAuthentication]
@@ -94,6 +94,36 @@ class SavedPostsView(APIView):
         user = request.user
         return Response(
             communityPostService.get_saved_posts(request=request, user=user),
+            status=status.HTTP_200_OK,
+        )
+    
+class CommentView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def post(self, request):
+        data = request.data
+        user = request.user
+        post = data.get('post')
+        parent = data.get('parent')
+        content = data.get('content')
+        return Response(
+            communityPostService.create_new_comment(post=post, user=user, parent=parent, content=content),
+            status=status.HTTP_201_CREATED,
+        )
+    
+    def get(self, request):
+        post = request.query_params.get('post')
+        parent = request.query_params.get('parent')
+        return Response(
+            communityPostService.get_post_comments(request=request, post=post, parent=parent),
+            status=status.HTTP_200_OK,
+        )
+    
+    def delete(self, request):
+        data = request.data
+        comment = data.get('comment')
+        return Response(
+            communityPostService.delete_comment(comment=comment),
             status=status.HTTP_200_OK,
         )
     
