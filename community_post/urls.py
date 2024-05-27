@@ -28,4 +28,9 @@ urlpatterns = [
         views.VotePostView.as_view(),
         name="vote-post-view",
     ),
+    path(
+        "saved/",
+        views.SavedPostsView.as_view(),
+        name="saved-posts-view",
+    ),
 ]

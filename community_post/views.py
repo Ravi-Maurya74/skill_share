@@ -86,3 +86,14 @@ class VotePostView(APIView):
             communityPostService.vote_post(post=post, user=user, value=value),
             status=status.HTTP_200_OK,
         )
+    
+class SavedPostsView(APIView):
+    authentication_classes = [FirebaseAuthentication]
+
+    def get(self, request):
+        user = request.user
+        return Response(
+            communityPostService.get_saved_posts(request=request, user=user),
+            status=status.HTTP_200_OK,
+        )
+    

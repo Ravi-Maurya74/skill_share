@@ -1,5 +1,5 @@
 from user.models import User
-from community_post.models import CommunityPost, SavedPost,Vote
+from community_post.models import CommunityPost, SavedPost, Vote
 from community_post.serializers import (
     CommunityPostSerializer,
     CommunityPostListSerializer,
@@ -60,3 +60,11 @@ class CommunityPostRepository:
             vote.save()
         else:
             Vote.objects.create(user=user, post=post, value=value)
+
+    def get_saved_posts(self, request, user):
+        saved_posts = SavedPost.objects.filter(user=user)
+        posts = [saved_post.post for saved_post in saved_posts]
+        serializer = CommunityPostListSerializer(
+            posts, many=True, context={"request": request}
+        )
+        return serializer.data
