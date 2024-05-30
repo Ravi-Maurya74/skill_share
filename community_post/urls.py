@@ -38,4 +38,9 @@ urlpatterns = [
         views.CommentView.as_view(),
         name="comment-view",
     ),
+    path(
+        "user/",
+        views.UserPostsView.as_view(),
+        name="user-posts-view",
+    ),
 ]

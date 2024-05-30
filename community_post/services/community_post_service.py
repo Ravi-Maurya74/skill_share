@@ -36,6 +36,14 @@ class CommunityPostService:
 
     def get_saved_posts(self, request, user):
         return self.repository.get_saved_posts(request=request, user=user)
+
+    def get_post_comments(self, request, post, parent):
+        return self.repository.get_comments(request=request, post=post, parent=parent)
+
+    def create_new_comment(self, post, request, parent, content):
+        return self.repository.create_new_comment(
+            post=post, request=request, parent=parent, content=content
+        )
     
-    def get_post_comments(self, request,post,parent):
-        return self.repository.get_comments(request=request,post=post,parent=parent)
+    def get_user_posts(self, request):
+        return self.repository.get_user_posts(request=request)

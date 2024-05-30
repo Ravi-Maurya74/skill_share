@@ -1,5 +1,5 @@
 from user.models import User
-from community_post.models import CommunityPost, SavedPost, Vote
+from community_post.models import CommunityPost, SavedPost, Vote, Comment
 from community_post.serializers import (
     CommunityPostSerializer,
     CommunityPostListSerializer,
@@ -74,5 +74,20 @@ class CommunityPostRepository:
         comments = post.comments.filter(parent=parent)
         serializer = CommentListSerializer(
             comments, many=True, context={"request": request}
+        )
+        return serializer.data
+    
+    def create_new_comment(self,post,request,parent,content):
+        post = CommunityPost.objects.get(pk=post)
+        if parent:
+            parent = Comment.objects.get(pk=parent)
+        comment = Comment.objects.create(post=post,user=request.user,parent=parent,content=content)
+        serializer = CommentListSerializer(comment,context={"request": request})
+        return serializer.data
+    
+    def get_user_posts(self,request):
+        posts = CommunityPost.objects.filter(user=request.user)
+        serializer = CommunityPostListSerializer(
+            posts, many=True, context={"request": request}
         )
         return serializer.data
