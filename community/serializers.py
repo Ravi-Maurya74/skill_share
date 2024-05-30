@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Avg
 
 from community.models import (
     Skill,
@@ -49,9 +50,16 @@ class CommunityListSerializer(serializers.ModelSerializer):
         ).exists()
     
 class SessionSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
     class Meta:
         model = Session
         fields = "__all__"
+
+    def get_rating(self, obj):
+        return Feedback.objects.filter(session=obj).aggregate(
+            rating=Avg("rating")
+        )["rating"]
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:

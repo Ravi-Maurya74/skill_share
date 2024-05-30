@@ -47,7 +47,7 @@ class Session(models.Model):
 
 class Feedback(models.Model):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE,related_name='feedbacks')
     rating = models.IntegerField()
     comments = models.TextField()
 

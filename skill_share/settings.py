@@ -107,7 +107,8 @@ DATABASES = {
     }
 }
 
-# DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"))
+DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"))
+DATABASES["default"]["OPTIONS"]={'connect_timeout': 5}
 
 
 # Password validation
