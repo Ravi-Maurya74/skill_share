@@ -1,3 +1,7 @@
+from django.http import JsonResponse
+from django.views import View
+import joblib
+import pandas as pd
 from rest_framework import generics, permissions, authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -96,3 +100,25 @@ class CommunityMembersView(APIView):
             return Response(CommunitySerializer(community).data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+ 
+        
+class PredictSessionView(View):
+    def get(self, request):
+        # Example: /predict?community=CommunityName&time=2023-06-01T14:00:00&duration=60
+        community = request.GET.get('community')
+        time = request.GET.get('time')
+        duration = int(request.GET.get('duration'))
+
+        time = pd.to_datetime(time)
+        hour = time.hour
+        day_of_week = time.dayofweek
+
+        # Load the trained model
+        model = joblib.load('community/trained_model.joblib')
+
+        # Predict
+        features = pd.DataFrame([[community, hour, day_of_week, duration]],
+                                columns=['community', 'hour', 'day_of_week', 'duration'])
+        predicted_rating = model.predict(features)[0]
+
+        return JsonResponse({'predicted_rating': predicted_rating})
