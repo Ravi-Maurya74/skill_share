@@ -60,6 +60,13 @@ class SessionSerializer(serializers.ModelSerializer):
         return Feedback.objects.filter(session=obj).aggregate(
             rating=Avg("rating")
         )["rating"]
+    
+class SessionCreateSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Session
+        fields = "__all__"
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:

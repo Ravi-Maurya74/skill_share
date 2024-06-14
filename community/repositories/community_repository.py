@@ -14,6 +14,7 @@ from community.serializers import (
     CommunitySerializer,
     CommunityListSerializer,
     SessionSerializer,
+    SessionCreateSerializer,
     FeedbackSerializer,
 )
 
@@ -53,7 +54,7 @@ class CommunityRepository:
         return Community.objects.all()
 
     def create_new_session_for_community(self, data):
-        serializer = SessionSerializer(data=data)
+        serializer = SessionCreateSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return serializer.data
